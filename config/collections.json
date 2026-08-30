@@ -1,0 +1,64 @@
+{
+  "collections": [
+    {
+      "name": "comments",
+      "load_type": "incremental",
+      "watermark_field": "date",
+      "description": "Comentários de usuários - 50k docs, carga incremental por data",
+      "projection": {
+        "_id": 1,
+        "name": 1,
+        "email": 1,
+        "movie_id": 1,
+        "text": 1,
+        "date": 1
+      },
+      "estimated_volume": 50000
+    },
+    {
+      "name": "movies",
+      "load_type": "full",
+      "watermark_field": null,
+      "description": "Catálogo de filmes - 21k docs, schema heterogêneo, full load",
+      "projection": {},
+      "estimated_volume": 21000
+    },
+    {
+      "name": "users",
+      "load_type": "full",
+      "watermark_field": null,
+      "description": "Dimensão de usuários - 185 docs, small table",
+      "projection": {
+        "_id": 1,
+        "name": 1,
+        "email": 1,
+        "password": 1
+      },
+      "estimated_volume": 185
+    },
+    {
+      "name": "theaters",
+      "load_type": "full",
+      "watermark_field": null,
+      "description": "Teatros com GeoJSON - 1.5k docs, dados geográficos",
+      "projection": {},
+      "estimated_volume": 1500
+    },
+    {
+      "name": "sessions",
+      "load_type": "full",
+      "watermark_field": null,
+      "description": "Sessões - poucos docs, pode estar vazia",
+      "projection": {},
+      "estimated_volume": 10
+    },
+    {
+      "name": "embedded_movies",
+      "load_type": "full",
+      "watermark_field": null,
+      "description": "Filmes com embeddings ML - 3.5k docs, arrays grandes",
+      "projection": {},
+      "estimated_volume": 3500
+    }
+  ]
+}

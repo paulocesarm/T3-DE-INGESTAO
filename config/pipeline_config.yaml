@@ -1,0 +1,33 @@
+# Pipeline Configuration - T3 Ingestão Moderna
+# Configurações globais para ingestão MongoDB -> Delta Lake Bronze
+
+mongodb:
+  secret_scope: "mongodb_scope"  # Databricks Secret Scope
+  secret_key: "mongodb_connection_string"  # Secret key para connection string
+  database: "sample_mflix"  # Database do MongoDB Atlas
+  
+resources:
+  batch_size: 10000  # Documentos por batch (evita OOM)
+  max_partitions: 8  # Número de partições Spark (evita small files)
+  connection_pool_size: 5  # Pool de conexões MongoDB
+  
+retry:
+  max_attempts: 3  # Tentativas em caso de falha
+  backoff_multiplier: 2  # Multiplicador exponencial (2^n segundos)
+  min_wait_seconds: 4
+  max_wait_seconds: 10
+  
+bronze:
+  catalog: "bronze"  # UC Catalog
+  schema: "sample_mflix"  # UC Schema
+  base_path: "/mnt/bronze/sample_mflix"  # Caminho físico
+  partition_column: "_ingestion_date"  # Coluna de partição
+  
+quality:
+  max_divergence_percent: 5.0  # Limiar de divergência origem x destino
+  fail_on_null_source_id: true  # Falha se _source_id for nulo
+  fail_on_duplicates: false  # Apenas alerta em duplicatas no lote
+  
+control:
+  log_table: "bronze.control_ingestion_log"  # Tabela de log de execuções
+  watermark_table: "bronze.control_watermarks"  # Tabela de watermarks
